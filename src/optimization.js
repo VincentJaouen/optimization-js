@@ -521,11 +521,11 @@ module.exports.minimize_GradientDescent = function (fnc, grd, x0, convergenceDet
 
     var pfx = fnc(x);
 
-    const hasConverged = (x, g, i) => {
+    const hasConverged = (xCurrent, gradient, iteration) => {
         if (convergenceDeterminer) {
-            return convergenceDeterminer(x, g, i);
+            return convergenceDeterminer(xCurrent, gradient, iteration);
         }
-        return vect_max_abs_x_less_eps(g, eps);
+        return vect_max_abs_x_less_eps(gradient, eps);
     };
 
     let cpt = 0;
