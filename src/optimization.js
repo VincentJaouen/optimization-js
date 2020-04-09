@@ -1,8 +1,8 @@
 /**
- * Dimension of real type. 
+ * Dimension of real type.
  * @constructor
  * @param {Number} low Lower bound of the values. Lower bound is inclusive.
- * @param {Number} high Upper inclusive bound of the values of dimension. 
+ * @param {Number} high Upper inclusive bound of the values of dimension.
  */
 function Real(low, high){
     this.low = low
@@ -22,10 +22,10 @@ module.exports.Real = function(low, high){
 }
 
 /**
- * Dimension of integer type. 
+ * Dimension of integer type.
  * @constructor
  * @param {Integer} low Lower bound of the values. Lower bound is inclusive.
- * @param {Integer} high Upper inclusive bound of the values of dimension. 
+ * @param {Integer} high Upper inclusive bound of the values of dimension.
  */
 function Integer(low, high){
     this.low = low
@@ -48,7 +48,7 @@ module.exports.Integer = function(low, high){
 /**
  * Dimension of categorical type. Values of the dimension can be a mix of integer,
  * float, string and boolean values (tested) as well as it is expected that other
- * javascript types should work. 
+ * javascript types should work.
  * @constructor
  * @param {Array} categories A set of all feasible values for the dimension. For
  * example, it could be ['a', 1, 2.0, 'zazz', true].
@@ -73,11 +73,11 @@ module.exports.Categorical = function(categories){
 }
 
 /**
- * An object that represents a search space for an optimization problem. 
+ * An object that represents a search space for an optimization problem.
  * Contains some helper methods, such as methods for automated sampling
  * of values from the space.
  * @constructor
- * @param {Number} dimensions An array of dimension descriptors that are 
+ * @param {Number} dimensions An array of dimension descriptors that are
  * used to specify search space.
  */
 function Space(dimensions){
@@ -124,18 +124,18 @@ module.exports.to_space = function(space_object){
     if(space_object instanceof Space){
         return space_object
     }
-    
+
     throw 'Unknown space definition'
 }
 
 /**
  * A random optimization function. Sometimes competitive in practice
- * for hyperparameter tuning for instance. 
+ * for hyperparameter tuning for instance.
  * @constructor
- * @param {Object} space An array of dimension descriptors that are 
+ * @param {Object} space An array of dimension descriptors that are
  * used to specify search space or an instance of {@link Space}.
  * @property {Array} X An array of arguments tried.
- * @property {Array} Y An array of function values observed. The 
+ * @property {Array} Y An array of function values observed. The
  * order corresponds to the order in arguments array.
  * @property {Array} best_x An argument that results in minimal objective
  * function value.
@@ -153,7 +153,7 @@ function RandomOptimizer(space){
      * Get the next point or array of points to evaluate.
      * @param {Number} n Specifies how many points should be provided by
      * the optimizer algorithm to try in parallel. If specified, an array
-     * of points to evaluate is returned. If not, only a single point is 
+     * of points to evaluate is returned. If not, only a single point is
      * returned verbatium.
      */
     this.ask = function(n=null){
@@ -166,11 +166,11 @@ function RandomOptimizer(space){
     }
 
     /**
-     * Report back to the optimizer the points that were tried. Do not 
-     * really need to do it for random sampling, but this is here for 
+     * Report back to the optimizer the points that were tried. Do not
+     * really need to do it for random sampling, but this is here for
      * consistency with future more "intelligent" algorithms.
      * @param {Array} X Array of observed points.
-     * @param {Array} Y Array of objective values corresponding to the 
+     * @param {Array} Y Array of objective values corresponding to the
      * points that were evaluated.
      */
     this.tell = function(X, Y){
@@ -199,14 +199,14 @@ module.exports.RandomOptimizer = function(space){
  * found point thus far. Such approach in particular yields better results
  * than with crossover on the SigOpt's "evalset" set of problems.
  * @constructor
- * @param {Array} dimensions A list of dimensions or a {@link Space} object. 
+ * @param {Array} dimensions A list of dimensions or a {@link Space} object.
  * Describes the space of values over which a function will be optimized.
  * @param {Integer} n_random_starts Determines how many points wil be generated
  * initially at random. The points are not generated at random after this
  * number of evaluations has been reported to the optimizer.
  * @param {Number} mutation_rate A value in the range of (0.0, 1.0]
  * @property {Array} X An array of arguments tried.
- * @property {Array} Y An array of function values observed. The 
+ * @property {Array} Y An array of function values observed. The
  * order corresponds to the order in arguments array.
  * @property {Array} best_x An argument that results in minimal objective
  * function value.
@@ -225,9 +225,9 @@ function OMGOptimizer(dimensions, n_random_starts = 13, mutation_rate = 0.1) {
     this.best_y = null
 
     /**
-    * Generates a boolean value at random. Is used for random mutations. 
-    * @param {Number} p Probability of generation of true value 
-    * @returns {Boolean} a randomly generated boolean value. 
+    * Generates a boolean value at random. Is used for random mutations.
+    * @param {Number} p Probability of generation of true value
+    * @returns {Boolean} a randomly generated boolean value.
     */
     this.rnd = function (p = null) {
 
@@ -245,8 +245,8 @@ function OMGOptimizer(dimensions, n_random_starts = 13, mutation_rate = 0.1) {
     } // end rnd
 
     /**
-    * Generates the next point to evaluate. Different points will be generated for multiple calls, which can be used for parallelisation of optimization. 
-    * @returns {Array} a point to evaluate. 
+    * Generates the next point to evaluate. Different points will be generated for multiple calls, which can be used for parallelisation of optimization.
+    * @returns {Array} a point to evaluate.
     */
     this.ask = function () {
 
@@ -331,12 +331,12 @@ function OMGOptimizer(dimensions, n_random_starts = 13, mutation_rate = 0.1) {
 
         return result;
 
-    } // end of ask function 
+    } // end of ask function
 
     /**
     *Function for reporting of the observed function values
     * @param {Array} X Array of observed points.
-    * @param {Array} Y Array of objective values corresponding to the 
+    * @param {Array} Y Array of objective values corresponding to the
     * points that were evaluated.
     */
     this.tell = function (X, Y) {
@@ -406,7 +406,7 @@ module.exports.dummy_minimize = dummy_minimize
  * number of evaluations has been reported to the optimizer.
  * @param {Number} mutation_rate A value in the range of (0.0, 1.0]
  * @return {OMGOptimizer} The optimizer instance, that contains information about found minimum and explored arguments.
-*/ 
+*/
 function rs_minimize (func, dimensions, n_calls=64, n_random_starts=13, mutation_rate=0.1){
     var opt = module.exports.OMGOptimizer(
         dimensions,
@@ -426,12 +426,12 @@ module.exports.rs_minimize = rs_minimize
 
 /**
  * Minimize an unconstrained function using zero order Powell algorithm.
- * @param {function} fnc Function to be minimized. This function takes 
- * array of size N as an input, and returns a scalar value as output, 
+ * @param {function} fnc Function to be minimized. This function takes
+ * array of size N as an input, and returns a scalar value as output,
  * which is to be minimized.
  * @param {Array} x0 An array of values of size N, which is an initialization
  *  to the minimization algorithm.
- * @return {Object} An object instance with two fields: argument, which 
+ * @return {Object} An object instance with two fields: argument, which
  * denotes the best argument found thus far, and fncvalue, which is a
  * value of the function at the best found argument.
 */
@@ -467,11 +467,11 @@ module.exports.minimize_Powell = function (fnc, x0) {
 
         }
 
-        // a simple step size selection rule. Near x function acts linear 
+        // a simple step size selection rule. Near x function acts linear
         // (this is assumed at least) and thus very small values of alpha
         // should lead to (small) improvement. Increasing alpha would
         // yield better improvement up to certain alpha size.
-        
+
         alpha = pfx > fx ? alpha * 1.1 : alpha * 0.7;
         pfx = fx;
 
@@ -492,20 +492,22 @@ module.exports.minimize_Powell = function (fnc, x0) {
 
 /**
  * Minimize an unconstrained function using first order gradient descent algorithm.
- * @param {function} fnc Function to be minimized. This function takes 
- * array of size N as an input, and returns a scalar value as output, 
+ * @param {function} fnc Function to be minimized. This function takes
+ * array of size N as an input, and returns a scalar value as output,
  * which is to be minimized.
  * @param {function} grd A gradient function of the objective.
  * @param {Array} x0 An array of values of size N, which is an initialization
  *  to the minimization algorithm.
- * @return {Object} An object instance with two fields: argument, which 
+ *  @param {function} Optional param to determine whether continuing or not.
+ *  Receives last iteration's array of size N, the gradient value and current iteration as params.
+ * @return {Object} An object instance with two fields: argument, which
  * denotes the best argument found thus far, and fncvalue, which is a
  * value of the function at the best found argument.
 */
-module.exports.minimize_GradientDescent = function (fnc, grd, x0) {
+module.exports.minimize_GradientDescent = function (fnc, grd, x0, convergenceDeterminer) {
     // fnc: function which takes array of size N as an input
     // grd: gradient (array of size N) of function for some input
-    // x0: array or real numbers of size N; 
+    // x0: array or real numbers of size N;
     // serves as initialization of algorithm.
 
     // solution is a struct, with fields:
@@ -519,9 +521,19 @@ module.exports.minimize_GradientDescent = function (fnc, grd, x0) {
 
     var pfx = fnc(x);
 
+    const hasConverged = (x, g, i) => {
+        if (convergenceDeterminer) {
+            return convergenceDeterminer(x, g, i);
+        }
+        return vect_max_abs_x_less_eps(g, eps);
+    };
+
+    let cpt = 0;
+
     while (!convergence) {
-        var g = grd(x);
-        convergence = vect_max_abs_x_less_eps(g, eps);
+        cpt += 1;
+        const g = grd(x);
+        convergence = hasConverged(x, g, cpt);
 
         if (convergence) {
             break;
@@ -529,18 +541,18 @@ module.exports.minimize_GradientDescent = function (fnc, grd, x0) {
 
         var repeat = true;
 
-        // a simple step size selection rule. Near x function acts linear 
+        // a simple step size selection rule. Near x function acts linear
         // (this is assumed at least) and thus very small values of alpha
         // should lead to (small) improvement. Increasing alpha would
         // yield better improvement up to certain alpha size.
-        
+
         while (repeat) {
             var xn = x.slice();
             vect_x_pluseq_ag(xn, -alpha, g); // perform step
             var fx = fnc(xn);
 
             repeat = pfx < fx;
-            // this automatically selects step size 
+            // this automatically selects step size
             alpha = repeat ? alpha * 0.7 : alpha * 1.1;
         }
 
@@ -558,20 +570,20 @@ module.exports.minimize_GradientDescent = function (fnc, grd, x0) {
 
 /**
  * Minimize an unconstrained function using first order L-BFGS algorithm.
- * @param {function} fnc Function to be minimized. This function takes 
- * array of size N as an input, and returns a scalar value as output, 
+ * @param {function} fnc Function to be minimized. This function takes
+ * array of size N as an input, and returns a scalar value as output,
  * which is to be minimized.
  * @param {function} grd A gradient function of the objective.
  * @param {Array} x0 An array of values of size N, which is an initialization
  *  to the minimization algorithm.
- * @return {Object} An object instance with two fields: argument, which 
+ * @return {Object} An object instance with two fields: argument, which
  * denotes the best argument found thus far, and fncvalue, which is a
  * value of the function at the best found argument.
 */
 module.exports.minimize_L_BFGS = function (fnc, grd, x0) {
     // fnc: function which takes array of size N as an input
     // grd: gradient (array of size N) of function for some input
-    // x0: array or real numbers of size N; 
+    // x0: array or real numbers of size N;
     // serves as initialization of algorithm.
 
     // solution is a struct, with fields:
@@ -643,7 +655,7 @@ module.exports.minimize_L_BFGS = function (fnc, grd, x0) {
         direction = r.slice();
 
         //  < ================= apply limited memory BFGS procedure ================= >
-        
+
         for (var i = 0; i < direction.length; i++) {
             direction[i] = -direction[i];
         }
@@ -745,7 +757,7 @@ function vect_x_pluseq_ag (x, a, g) {
 };
 
 /**
- * Checks whether absolute values in a vector are greater than 
+ * Checks whether absolute values in a vector are greater than
  * some threshold.
  * @ignore
  * @param {Array} x Vector that is checked.
@@ -760,3 +772,5 @@ function vect_max_abs_x_less_eps (x, eps) {
     }
     return true;
 };
+
+module.exports.vect_max_abs_x_less_eps = vect_max_abs_x_less_eps;
